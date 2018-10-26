@@ -1,0 +1,428 @@
+//mainactivity
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+	
+    <Button 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:id="@+id/browse"
+        android:text="Browse" />
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/browse"
+        android:layout_marginTop="20dp"
+        android:id="@+id/selected"
+        android:textStyle="bold"
+        android:textColor="#4189E1"
+        android:textSize="20sp"
+        android:text="Selected file" />
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/selected"
+        android:layout_marginTop="20dp"
+        android:id="@+id/file_path"
+        android:text="No file has been selected"
+        android:textSize="18sp" />
+    
+</RelativeLayout>
+
+//Step 3 : Open res -> layout -> empty_view.xml
+
+<TextView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:text="No files or directories"
+	android:background="@android:drawable/toast_frame"
+	android:textSize="28sp"
+	android:gravity="center_vertical|center_horizontal" />
+
+	
+	//res -> layout -> list_item.xml
+	
+	<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+  	
+    <ImageView
+      	android:id="@+id/file_picker_image"
+      	android:layout_width="40dip"
+      	android:layout_height="40dip"
+      	android:layout_marginTop="5dip"
+      	android:layout_marginBottom="5dip"
+      	android:layout_marginLeft="5dip"
+      	android:src="@drawable/ic_launcher"
+      	android:scaleType="centerCrop" />
+  	
+    <TextView
+    	android:id="@+id/file_picker_text"
+      	android:layout_width="wrap_content"
+      	android:layout_height="wrap_content"
+      	android:layout_weight="1"
+      	android:layout_gravity="left|center_vertical"
+      	android:textSize="28sp"
+      	android:layout_marginLeft="10dip"
+      	android:singleLine="true"
+      	android:text="Filename" />
+  	
+</LinearLayout>
+
+//Open src -> package -> MainActivity.java
+
+package balaji.browse_ex1;
+ 
+import java.io.File;
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Intent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+ 
+public class MainActivity extends Activity implements OnClickListener {
+ 
+    private static final int REQUEST_PICK_FILE = 1;
+ 
+    private TextView filePath;
+    private Button Browse;
+    private File selectedFile;
+ 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+ 
+        filePath = (TextView)findViewById(R.id.file_path);
+        Browse = (Button)findViewById(R.id.browse);
+        Browse.setOnClickListener(this);      
+    }
+ 
+    public void onClick(View v) {
+    	
+        switch(v.getId()) {
+        
+        case R.id.browse:
+            Intent intent = new Intent(this, FilePicker.class);            
+            startActivityForResult(intent, REQUEST_PICK_FILE);
+            break;
+        }
+    }
+ 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	
+        if(resultCode == RESULT_OK) {
+        	
+            switch(requestCode) {
+            
+            case REQUEST_PICK_FILE:
+            	
+                if(data.hasExtra(FilePicker.EXTRA_FILE_PATH)) {
+                	
+                    selectedFile = new File
+                    		(data.getStringExtra(FilePicker.EXTRA_FILE_PATH));
+                    filePath.setText(selectedFile.getPath());  
+                }
+                break;
+            }
+        }
+    }
+}
+
+
+
+//src -> package -> FilePicker.java
+
+ackage balaji.browse_ex1;
+ 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import android.app.ListActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+ 
+public class FilePicker extends ListActivity {
+ 
+    public final static String EXTRA_FILE_PATH = "file_path";
+    public final static String EXTRA_SHOW_HIDDEN_FILES = "show_hidden_files";
+    public final static String EXTRA_ACCEPTED_FILE_EXTENSIONS = "accepted_file_extensions";
+    private final static String DEFAULT_INITIAL_DIRECTORY = "/";
+ 
+    protected File Directory;
+    protected ArrayList<File> Files;
+    protected FilePickerListAdapter Adapter;
+    protected boolean ShowHiddenFiles = false;
+    protected String[] acceptedFileExtensions;
+ 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+ 
+        LayoutInflater inflator = (LayoutInflater) 
+        		getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        
+        View emptyView = inflator.inflate(R.layout.empty_view, null);
+        ((ViewGroup) getListView().getParent()).addView(emptyView);
+        getListView().setEmptyView(emptyView);
+ 
+        // Set initial directory
+        Directory = new File(DEFAULT_INITIAL_DIRECTORY);
+ 
+        // Initialize the ArrayList
+        Files = new ArrayList<File>();
+ 
+        // Set the ListAdapter
+        Adapter = new FilePickerListAdapter(this, Files);
+        setListAdapter(Adapter);
+ 
+        // Initialize the extensions array to allow any file extensions
+        acceptedFileExtensions = new String[] {};
+ 
+        // Get intent extras
+        if(getIntent().hasExtra(EXTRA_FILE_PATH)) 
+        	Directory = new File(getIntent().getStringExtra(EXTRA_FILE_PATH));
+        
+        if(getIntent().hasExtra(EXTRA_SHOW_HIDDEN_FILES)) 
+        	ShowHiddenFiles = getIntent().getBooleanExtra(EXTRA_SHOW_HIDDEN_FILES, false);
+        
+        if(getIntent().hasExtra(EXTRA_ACCEPTED_FILE_EXTENSIONS)) {
+        	
+            ArrayList<String> collection = 
+            		getIntent().getStringArrayListExtra(EXTRA_ACCEPTED_FILE_EXTENSIONS);
+            
+            acceptedFileExtensions = (String[]) 
+            		collection.toArray(new String[collection.size()]);
+        }
+    }
+ 
+    @Override
+    protected void onResume() {
+        refreshFilesList();
+        super.onResume();
+    }
+ 
+    protected void refreshFilesList() {
+    	
+        Files.clear();
+        ExtensionFilenameFilter filter = 
+        		new ExtensionFilenameFilter(acceptedFileExtensions);
+ 
+        File[] files = Directory.listFiles(filter);
+        
+        if(files != null && files.length > 0) {
+        	
+            for(File f : files) {
+            	
+                if(f.isHidden() && !ShowHiddenFiles) {
+                	
+                    continue;
+                }
+                
+                Files.add(f);
+            }
+ 
+            Collections.sort(Files, new FileComparator());
+        }
+        
+        Adapter.notifyDataSetChanged();
+    }
+ 
+    @Override
+    public void onBackPressed() {
+    	
+        if(Directory.getParentFile() != null) {
+        	
+            Directory = Directory.getParentFile();
+            refreshFilesList();
+            return;
+        }
+ 
+        super.onBackPressed();
+    }
+ 
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+    	
+        File newFile = (File)l.getItemAtPosition(position);
+ 
+        if(newFile.isFile()) {
+            
+	    Intent extra = new Intent();
+            extra.putExtra(EXTRA_FILE_PATH, newFile.getAbsolutePath());
+            setResult(RESULT_OK, extra);
+            finish();
+        } 
+        else {
+        	
+            Directory = newFile;
+            refreshFilesList();
+        }
+ 
+        super.onListItemClick(l, v, position, id);
+    }
+ 
+    private class FilePickerListAdapter extends ArrayAdapter<File> {
+ 
+        private List<File> mObjects;
+ 
+        public FilePickerListAdapter(Context context, List<File> objects) {
+        	
+            super(context, R.layout.list_item, android.R.id.text1, objects);
+            mObjects = objects;
+        }
+ 
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+ 
+            View row = null;
+ 
+            if(convertView == null) { 
+            	
+                LayoutInflater inflater = (LayoutInflater) 
+                		getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                
+                row = inflater.inflate(R.layout.list_item, parent, false);
+            } 
+            else 
+                row = convertView;
+ 
+            File object = mObjects.get(position);
+ 
+            ImageView imageView = (ImageView)row.findViewById(R.id.file_picker_image);
+            TextView textView = (TextView)row.findViewById(R.id.file_picker_text);
+            textView.setSingleLine(true);
+            textView.setText(object.getName());
+            
+            if(object.isFile()) 
+                imageView.setImageResource(R.drawable.file);
+            
+             else 
+                imageView.setImageResource(R.drawable.folder);
+            
+            return row;
+        }
+    }
+ 
+    private class FileComparator implements Comparator<File> {
+    	
+        public int compare(File f1, File f2) {
+        	
+            if(f1 == f2) 
+                return 0;
+            
+            if(f1.isDirectory() && f2.isFile()) 
+                // Show directories above files
+                return -1;
+            
+            if(f1.isFile() && f2.isDirectory()) 
+                // Show files below directories
+                return 1;
+            
+            // Sort the directories alphabetically
+            return f1.getName().compareToIgnoreCase(f2.getName());
+        }
+    }
+ 
+    private class ExtensionFilenameFilter implements FilenameFilter {
+    	
+        private String[] Extensions;
+ 
+        public ExtensionFilenameFilter(String[] extensions) {
+        	
+            super();
+            Extensions = extensions;
+        }
+ 
+        public boolean accept(File dir, String filename) {
+        	
+            if(new File(dir, filename).isDirectory()) {
+            	
+                // Accept all directory names
+                return true;
+            }
+            
+            if(Extensions != null && Extensions.length > 0) {
+            	
+                for(int i = 0; i < Extensions.length; i++) {
+                	
+                    if(filename.endsWith(Extensions[i])) {
+                    	
+                        // The filename ends with the extension
+                        return true;
+                    }
+                }
+                // The filename did not match any of the extensions
+                return false;
+            }
+            // No extensions has been set. Accept all file extensions.
+            return true;
+        }
+    }
+}
+
+//Open AndroidManifest.xml 
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="balaji.browse_ex1"
+	C:\Users\meshack\AppData\Local\Android\sdk1
+	
+    android:versionCode="1"
+    android:versionName="1.0" >
+ 
+    <uses-sdk
+        android:minSdkVersion="5"
+        android:targetSdkVersion="17" />
+ 
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="balaji.browse_ex1.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+ 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".FilePicker"></activity>
+		
+		//string/app_name
+		
+		<?xml version="1.0" encoding="utf-8"?>
+<resources>
+ 
+    <string name="app_name">Browse_Ex1</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+ 
+</resources>
+
+
