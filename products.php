@@ -14,8 +14,8 @@ if ($_SESSION['role'] !== 'admin') {
       <nav>
         <div class="nav-wrapper">
           <div class="col s12">
-            <a href="index" class="breadcrumb">Dashboard</a>
-            <a href="products" class="breadcrumb">Stock</a>
+            <a href="indexadm.php" class="breadcrumb">Dashboard</a>
+            <a href="products.php" class="breadcrumb">Stock</a>
           </div>
         </div>
       </nav>
@@ -53,11 +53,14 @@ if ($_SESSION['role'] !== 'admin') {
              <div class="card hoverable animated slideInUp wow">
                <div class="card-image">
                  <a href="productstock.php?id=<?= $id_cat; ?>&category=<?= $name; ?>&icon=<?= $icon; ?>">
-                   <img src="src/img/<?= $icon; ?>.png" alt=""></a>
-                 <span class="card-title blue-text"><?= $name; ?>s</span>
+                   <img src="" style="background-image: url('src/img/<?= $icon; ?>.jpg'); background-repeat: no-repeat; background-size: contain;" alt="" height="250px">
+                 </a>
                </div>
+               <div class="card-title">
+                 <span class="card-title blue-text"><?= $name; ?>s</span>
+                </div >
                <div class="card-content">
-                 <h5 class="white-text"><?= $total; ?></h5>
+                 <h5 ><?= $total; ?></h5>
                </div>
              </div>
            </div>

@@ -14,9 +14,9 @@ if ($_SESSION['role'] !== 'admin') {
       <nav>
         <div class="nav-wrapper">
           <div class="col s12">
-            <a href="index" class="breadcrumb">Dashboard</a>
-            <a href="infoproduct" class="breadcrumb">Products</a>
-            <a href="stats" class="breadcrumb">stats</a>
+            <a href="indexadm.php" class="breadcrumb">Dashboard</a>
+            <a href="infoproduct.php" class="breadcrumb">Products</a>
+            <a href="stats.php" class="breadcrumb">stats</a>
           </div>
         </div>
       </nav>
@@ -61,7 +61,7 @@ if ($_SESSION['role'] !== 'admin') {
                   <div class="col s2">
                     <p class="black-text"><?= $name_best; ?></p>
                     <div class="card red<?= $idp; ?>" style="padding-top:<?=number_format((float)$percent, 2, '.', ''); ?>%">
-                       <h5 class="white-text"><?=number_format((float)$percent, 2, '.', '');  ?>%</h5>
+                       <h5 class=><?=number_format((float)$percent, 2, '.', '');  ?>%</h5>
                     </div>
                   </div>
 

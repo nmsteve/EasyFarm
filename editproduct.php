@@ -14,9 +14,9 @@ if ($_SESSION['role'] !== 'admin') {
       <nav>
         <div class="nav-wrapper">
           <div class="col s12">
-            <a href="index" class="breadcrumb">Dashboard</a>
-            <a href="infoproduct" class="breadcrumb">Products</a>
-            <a href="editproduct" class="breadcrumb">Commands</a>
+            <a href="indexadm.php" class="breadcrumb">Dashboard</a>
+            <a href="infoproduct.php" class="breadcrumb">Products</a>
+            <a href="editproduct.php" class="breadcrumb">Commands</a>
           </div>
         </div>
       </nav>

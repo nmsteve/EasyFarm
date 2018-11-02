@@ -55,7 +55,7 @@ function CreateThumbs($src, $dst, $width, $height, $crop=0){
 
 }
 
-  $path = "../products/";
+  $path = "products/";
   $file = $path . basename($_FILES["thumbnail"]["name"]);
   $uploadOk = 1;
   $type = pathinfo($file,PATHINFO_EXTENSION);
@@ -99,7 +99,7 @@ function CreateThumbs($src, $dst, $width, $height, $crop=0){
 
 
 
-$img_path = "../products/".$_FILES["thumbnail"]["name"];
+$img_path = "products/".$_FILES["thumbnail"]["name"];
 //resize_function//////////////////////////////////////////////////
 CreateThumbs($img_path, $img_path, 602, 600, 1);
 

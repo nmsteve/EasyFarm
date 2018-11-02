@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2100" height="1500" viewBox="0 0 2100 1500">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 50px;
+        fill: #2aa3d6;
+        font-family: "Myriad Pro";
+      }
+
+      .cls-2 {
+        font-size: 1041.667px;
+        font-family: Georgia;
+      }
+    </style>
+  </defs>
+  <text id="_E_" data-name="  E " class="cls-1" x="804"> <tspan class="cls-2" x="804" dy="1250">E </tspan></text>
+</svg>

@@ -4,7 +4,7 @@
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <title>EasyFarm</title>
-      <link rel="icon" href="src/img/icon.png">
+      <link rel="icon" href="http://localhost/EasyFarm/src/img/EPNG.png?v=2">
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <!-- font-awesome -->

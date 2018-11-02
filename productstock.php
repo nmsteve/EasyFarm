@@ -3,7 +3,7 @@
 session_start();
 
 if ($_SESSION['role'] !== 'admin') {
-  header('Location: ../index');
+  header('Location: index');
 }
 
 $category = $_GET['id'];
@@ -16,9 +16,9 @@ $category = $_GET['id'];
       <nav>
         <div class="nav-wrapper">
           <div class="col s12">
-            <a href="index" class="breadcrumb">Dashboard</a>
-            <a href="products" class="breadcrumb">Stock</a>
-            <a href="productstock" class="breadcrumb">Products</a>
+            <a href="indexadm.php" class="breadcrumb">Dashboard</a>
+            <a href="products.php" class="breadcrumb">Stock</a>
+            
           </div>
         </div>
       </nav>
@@ -27,7 +27,7 @@ $category = $_GET['id'];
    <div class="container stocki">
        <div class="row">
            <?php
-           include '../db.php';
+           include 'db.php';
             // get stock
             $query = "SELECT * FROM product WHERE id_category = '$category'";
             $result = $connection->query($query);
@@ -42,11 +42,12 @@ $category = $_GET['id'];
            <div class="col s12 m4">
              <div class="card hoverable animated slideInUp wow">
                <div class="card-image">
-                     <img src="../products/<?= $thumbnail; ?>">
+                     
+                     <img src="" style="background-image: url('products/<?= $thumbnail; ?>'); background-repeat: no-repeat; background-size: contain;" alt="" height="250px"></a>
                    <span class="card-title grey-text"><?= $name; ?></span>
                  </div>
                  <div class="card-content">
-                      <h5 class="white-text">$ <?= $price; ?></h5>
+                      <h5 >$ <?= $price; ?></h5>
                       <a class="blue-text" href="deleteproduct.php?id=<?= $id_product;?>">Delete</a>
                  </div>
              </div>

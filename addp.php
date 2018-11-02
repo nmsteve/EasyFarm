@@ -19,8 +19,8 @@ require 'includes/navconnected.php'; } ?>
     <nav>
       <div class="nav-wrapper">
         <div class="col s12">
-          <a href="index" class="breadcrumb">Dashboard</a>
-          <a href="addproduct" class="breadcrumb"><?= $name_category; ?></a>
+          <a href="indexadm.php" class="breadcrumb">Dashboard</a>
+          <a href="addproduct.php" class="breadcrumb"><?= $name_category; ?></a>
         </div>
       </div>
     </nav>
@@ -32,10 +32,10 @@ require 'includes/navconnected.php'; } ?>
     <div class="card">
       <?php
 
-       include '../db.php';
+       include 'db.php';
        ?>
       <div class="center-align">
-        <img class="responsive-img" src="src/img/<?= $caticon; ?>.png">
+        <img class="responsive-img" src="src/img/<?= $caticon; ?>.jpg">
       </div>
 
       <div class="row">

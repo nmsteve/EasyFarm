@@ -64,7 +64,7 @@ if ($_SESSION['role'] !== 'admin') {
                   <div class="col s2">
                     <p class="black-text"><?= $name_best; ?></p>
                     <div class="card red<?= $idp; ?>" style="padding-top:<?=number_format((float)$percent, 2, '.', ''); ?>%">
-                       <h5 class="white-text"><?=number_format((float)$percent, 2, '.', '');  ?>%</h5><p class="grey-text"><?=$totalsold ?></p>
+                       <h5 ><?=number_format((float)$percent, 2, '.', '');  ?>%</h5><p class="grey-text"><?=$totalsold ?></p>
                     </div>
                   </div>
 

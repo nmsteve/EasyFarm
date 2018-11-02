@@ -18,7 +18,7 @@ require 'includes/navconnected.php'; }
     <nav>
       <div class="nav-wrapper">
         <div class="col s12">
-          <a href="index" class="breadcrumb">Dashboard</a>
+          <a href="indexadm.php" class="breadcrumb">Dashboard</a>
           <a href="infoproduct.php" class="breadcrumb">Managa Products</a>
           <a href="addproduct.php" class="breadcrumb">Add product</a>
         </div>
@@ -49,8 +49,14 @@ require 'includes/navconnected.php'; }
           <div class="card hoverable animated slideInUp wow">
             <div class="card-image">
               <a href="addp.php?id=<?= $id_category; ?>&category=<?= $name_category; ?>&icon=<?= $icon_category; ?>">
-                <img src="src/img/<?= $icon_category; ?>.png" alt=""></a>
-              <span class="card-title blue-text"><?= $name_category; ?></span>
+              <img src="" style="background-image: url('src/img/<?= $icon_category; ?>.jpg'); background-repeat: no-repeat; background-size: contain;" alt="" height="250px">
+              </a>
+            </div>
+            <div class="card-title">
+              <span class="card-title blue-text">
+              <?= $name_category; ?>
+              </span>
+              
             </div>
           </div>
         </div>

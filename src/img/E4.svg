@@ -1,0 +1,23 @@
+<svg id="EasyFarm_Logo" data-name="EasyFarm Logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2100" height="1500" viewBox="0 0 2100 1500">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-2 {
+        font-size: 1250px;
+        fill: #f7104c;
+        font-family: Georgia;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="1050" y1="1500" x2="1050" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#97461a"/>
+      <stop offset="0.3" stop-color="#fbd8c5"/>
+      <stop offset="0.83" stop-color="#6c2e16"/>
+      <stop offset="1" stop-color="#efdbcd"/>
+    </linearGradient>
+  </defs>
+  <rect id="Rounded_Rectangle_1" data-name="Rounded Rectangle 1" class="cls-1" width="2100" height="1500" rx="10" ry="10"/>
+  <text id="E" class="cls-2" transform="matrix(1.217, 0, 0, 1.217, 496.404, 1287.7)">E</text>
+</svg>
