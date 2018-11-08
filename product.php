@@ -112,9 +112,16 @@ $id_product =$_GET['id'];
                     $date_ordered = date("F j, Y");
                     if (!isset($_SESSION['orderinfo'])) {
                       
-                      $queryorder = "INSERT INTO orders(order_id, buyer_id, buyer_name, date_ordered, total_price, status, address)
+                      $querycommand = "INSERT INTO  command
+                                              (id,  id_produit,   quantity, dat,  statut,  id_user)
+                                       VALUES (null,'$id_product', '0',     null,'ordered','$idsess')";
+                      $result2 = $connection->query($querycommand);                 
+                     
+                     $queryorder = "INSERT INTO orders(order_id, buyer_id, buyer_name, date_ordered, total_price, status, address)
                       VALUES (null, '$idsess', '$namesess', '$date_ordered', '0','ordered',  '$addsess')";
                       $result1 = $connection->query($queryorder);
+
+                      
 
                       if ($result1 === TRUE) {                    
                         $last_id = $connection->insert_id;
