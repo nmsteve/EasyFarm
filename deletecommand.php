@@ -9,8 +9,11 @@ if (isset($_GET['id'])) {
 
    $query_delete = "DELETE FROM order_details WHERE detail_id = '$id' AND item_id = '$idsess'";
    $result_delete = $connection->query($query_delete);
-
-   $_SESSION['item'] -= 1;
+   if ($_SESSION['item'] > 0 )
+    {$_SESSION['item'] -= 1;
+    }else
+    {$_SESSION['item'] = $_SESSION['item'];}
+   
 
 header('Location: ' . $_SERVER['HTTP_REFERER']);
 }

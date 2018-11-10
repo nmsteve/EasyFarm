@@ -17,15 +17,21 @@
                        order_details.detail_id as 'idcmd',
                        order_details.item_id,
                        order_details.quantity as 'quantity',
+
                        orders.order_id as 'idorder',
                        orders.status,
                        orders.buyer_id as 'iduser',
 
+                       command.id_user,
+                       command.id as 'commandid',
+                       command.statut as 'commandstatut',
+                        
+
                        users.id
 
-                       FROM product, orders, order_details, users
+                       FROM product, orders, order_details, users, command 
                        WHERE product.id = order_details.item_id AND users.id = orders.buyer_id
-                       AND order_details.order_id = orders.order_id
+                       AND order_details.order_id = orders.order_id AND command.id_user = orders.buyer_id
                        AND orders.buyer_id = '{$_SESSION['id']}' AND orders.status = 'ordered'";
     $resultcmd = $connection->query($querycmd);
     if($resultcmd->num_rows > 0){
@@ -38,12 +44,17 @@
           $pricecmd = $rowcmd['price'];
           $itemid = $rowcmd['idcmd'];
           $orderid = $rowcmd['idorder'];
+          
+          $commandid = $rowcmd['commandid'];
+          $commandstatus =$rowcmd['commandstatut'];
+
+
           $firstnamecmd = $_POST['firstname'];
           $lastnamecmd = $_POST['lastname'];
           $phonecmd = $_POST['phone'];
           $citycmd = $_POST['city'];
           $addresscmd = $_POST['address'];
-
+         
           $idusercmd = $rowcmd['iduser'];
 
           $price += $pricecmd * $quantitycmd;
@@ -55,6 +66,14 @@
             $query_details = "UPDATE orders SET total_price = '$price', status = 'ready', phone = '$phonecmd', city = '$citycmd' WHERE order_id = '$orderid'";
             $resultdetails = $connection->query($query_details);
 
+            $querycommand ="UPDATE command SET statut = 'done', quantity =$quantitycmd WHERE  statut = 'ordered' AND id_user =$idusercmd";
+            $resultpay2 = mysqli_query($connection, $querycommand);
+
+            $querycommand_details = "INSERT INTO details_command
+                  (id,  product,     quantity,     price, id_command,  id_user,    users,     address,    phone,    city, statut )
+            VALUES(null,'$productcmd', '$quantitycmd', '$price',  '$commandid' ,   '$idusercmd', '$fullname', '$addresscmd','$phonecmd','$citycmd','$commandstatus')";
+            $commanddata =mysqli_query($connection, $querycommand_details);
+                                
             if ($resultdetails ) {
               # Reduce quantity if not below zero...
               $queryreduce = "UPDATE product SET quantity = '$qty' WHERE id = '{$productid}' ";
@@ -66,7 +85,8 @@
 
                 $querypay = "UPDATE orders SET status = 'checked' WHERE order_id = '$orderid' AND status = 'ready'";
                 //var_dump($querypay);
-                $resultpay = mysqli_query($connection, $querypay);
+                $resultpay1 = mysqli_query($connection, $querypay);
+                
               }else {
               $msg = "Sorry. Not enough items in stock";
               $msg2 = "Your order could not be completed";

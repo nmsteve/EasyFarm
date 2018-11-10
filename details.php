@@ -87,6 +87,11 @@ else {
           $queryupdate = "UPDATE orders SET status = 'pending' WHERE buyer_id = '$idsess' AND status = 'checked'";
           $queryupdate = mysqli_query($connection, $queryupdate);
 
+          $querycommand ="UPDATE command SET statut = 'paid' WHERE  statut = 'done'AND Id_user = '$idsess'";
+          $resultpay2 = mysqli_query($connection, $querycommand); 
+          
+          $querycommand_details ="UPDATE details_command SET statut ='paid' WHERE statut = 'ordered'AND id_user = '$idsess' " ;
+          $resultspay3= mysqli_query($connection,$querycommand_details);
           echo "<meta http-equiv='refresh' content='0;url=index.php' />";
         }
 
